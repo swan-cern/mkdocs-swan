@@ -1,0 +1,55 @@
+ {% extends "full_width.html" %}
+
+<!-- Add Jupyter basic javascript at the head of the file -->
+{% block extrahead %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .md-main__inner.md-grid {
+        margin-top: 0;
+    }
+    
+    .anchor-link {
+        display: none;
+    }
+</style>
+{% endblock %} 
+
+{% if page and page.meta and page.meta.notebook_name %} 
+    {% set _ = page.meta.__setitem__("title", page.meta.notebook_name) %} 
+
+    {% block hero %}
+    <div class="md-hero md-hero--expand" data-md-component="hero">
+        <div class="md-hero__inner md-grid">
+            {{ page.meta.notebook_name }} 
+            
+            {% if page.meta.notebook_url %}
+            <a href="{{ config.open_in_swan_url }}{{  config.gallery_url + page.meta.notebook_url | urlencode }}" title="Open in SWAN" class="md-content__button md-icon">
+                            {% include ".icons/material/pencil.svg" %}
+                            <span class="button__text">Open in SWAN</span>
+                        </a>
+            <a href="{{ page.meta.notebook_url }}" title="Open in SWAN" class="md-content__button md-icon">
+                            {% include ".icons/material/download.svg" %}
+                            <span class="button__text">Download</span>
+                        </a> 
+            {% endif %}
+        </div>
+    </div>
+    {% endblock %} 
+{% endif %} 
+
+{% block content %}
+<!-- h1 needs to exist to activate the title change -->
+<h1 style="margin: 0;"></h1>
+<div id="notebook">
+    <div class="container" id="notebook-container">
+        {{ super() }}
+    </div>
+    <div class="end_space"></div>
+</div>
+{% endblock %} 

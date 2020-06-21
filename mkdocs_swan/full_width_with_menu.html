@@ -1,0 +1,42 @@
+{% extends "main.html" %}
+
+<!-- Make sure the content occupies the full width -->
+{% block styles %}
+{{ super() }}
+<style>
+.md-content {
+    max-width: 100%;
+}
+
+.md-header-nav__button.md-icon {
+    display: none;
+}
+
+.md-header-nav__button.md-logo {
+    display: inline;
+}
+</style>
+{% endblock %}
+
+
+<!-- Remove the toc  -->
+{% block site_nav %}
+<!-- Main navigation -->
+{% if nav %}
+    <div
+    class="md-sidebar md-sidebar--primary"
+    data-md-component="navigation"
+    >
+    <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner">
+        {% include "partials/nav.html" %}
+        </div>
+    </div>
+    </div>
+{% endif %}
+{% endblock %}
+
+<!-- Keep only the content of the page -->
+{% block content %}
+{{ page.content }}
+{% endblock %}
