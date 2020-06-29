@@ -1,20 +1,21 @@
 {% extends "main.html" %}
 
 <!-- Make sure the content occupies the full width -->
-{% block styles %}
-{{ super() }}
+{% block styles %} {{ super() }}
 <style>
-.md-content {
-    max-width: 100%;
-}
-
-.md-header-nav__button.md-icon {
-    display: none;
-}
-
-.md-header-nav__button.md-logo {
-    display: inline;
-}
+    .md-content {
+        max-width: 100%;
+        margin-right: 0;
+        /*fix for mkdocs < 5.3 */
+    }
+    
+    .md-header-nav__button.md-icon {
+        display: none;
+    }
+    
+    .md-header-nav__button.md-logo {
+        display: inline;
+    }
 </style>
 {% endblock %}
 
@@ -23,20 +24,14 @@
 {% block site_nav %}
 <!-- Main navigation -->
 {% if nav %}
-    <div
-    class="md-sidebar md-sidebar--primary"
-    data-md-component="navigation"
-    >
+<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
     <div class="md-sidebar__scrollwrap">
         <div class="md-sidebar__inner">
-        {% include "partials/nav.html" %}
+            {% include "partials/nav.html" %}
         </div>
     </div>
-    </div>
-{% endif %}
-{% endblock %}
+</div>
+{% endif %} {% endblock %}
 
 <!-- Keep only the content of the page -->
-{% block content %}
-{{ page.content }}
-{% endblock %}
+{% block content %} {{ page.content }} {% endblock %}

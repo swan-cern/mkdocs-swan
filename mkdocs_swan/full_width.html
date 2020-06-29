@@ -1,5 +1,14 @@
  {% extends "full_width_with_menu.html" %}
 
+ {% block styles %}
+{{ super() }}
+<style>
+.md-content {
+    margin-left: 0; /*fix for mkdocs < 5.3 */
+}
+</style>
+{% endblock %}
+
 <!-- Remove the sidebar and menu  -->
 {% block site_nav %}
 {% endblock %}
