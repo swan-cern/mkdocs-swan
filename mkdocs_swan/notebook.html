@@ -9,15 +9,7 @@
 
 {% block styles %}
 {{ super() }}
-<style>
-    .md-main__inner.md-grid {
-        margin-top: 0;
-    }
-    
-    .anchor-link {
-        display: none;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="{{ 'css/notebook.css' | url }}" />
 {% endblock %} 
 
 {% if page and page.meta and page.meta.notebook_name %} 
@@ -50,6 +42,5 @@
     <div class="container" id="notebook-container">
         {{ super() }}
     </div>
-    <div class="end_space"></div>
 </div>
 {% endblock %} 
