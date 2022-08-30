@@ -1,4 +1,14 @@
- {% extends "full_width.html" %}
+<script type="text/javascript">
+    function openInSwan(){
+        if ( window.location !== window.parent.location ) {
+            window.parent.postMessage('{{config.gallery_url + page.meta.notebook_url | url}}','https://swan-qa001.cern.ch');
+        } else {
+            window.open("{{ config.open_in_swan_url }}{{  config.gallery_url + page.meta.notebook_url | urlencode }}");
+        }
+    }
+</script>
+
+{% extends "full_width.html" %}
 
 <!-- Add Jupyter basic javascript at the head of the file -->
 {% block extrahead %}
@@ -12,6 +22,7 @@
 <link rel="stylesheet" type="text/css" href="{{ 'css/notebook.css' | url }}" />
 {% endblock %} 
 
+
 {% if page and page.meta and page.meta.notebook_name %} 
     {% set _ = page.meta.__setitem__("title", page.meta.notebook_name) %} 
 
@@ -21,8 +32,8 @@
             {{ page.meta.notebook_name }} 
             
             {% if page.meta.notebook_url %}
-            <a href="{{ config.open_in_swan_url }}{{  config.gallery_url + page.meta.notebook_url | urlencode }}" title="Open in SWAN" class="md-content__button md-icon">
-                            {% include ".icons/material/pencil.svg" %}
+            <a id="openInSWAN" onclick="openInSwan()" title="Open in SWAN" class="md-content__button md-icon">
+                                        {% include ".icons/material/pencil.svg" %}
                             <span class="button__text">Open in SWAN</span>
                         </a>
             <a href="{{ page.meta.notebook_url }}" title="Download" class="md-content__button md-icon">
