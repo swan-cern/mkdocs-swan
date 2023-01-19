@@ -1,17 +1,23 @@
-<script type="text/javascript">
-    function openInSwan(){
-        if ( window.location !== window.parent.location ) {
-            window.parent.postMessage('{{config.gallery_url + page.meta.notebook_url | url}}','https://swan-qa001.cern.ch');
-        } else {
-            window.open("{{ config.open_in_swan_url }}{{  config.gallery_url + page.meta.notebook_url | urlencode }}");
-        }
-    }
-</script>
-
 {% extends "full_width.html" %}
 
 <!-- Add Jupyter basic javascript at the head of the file -->
 {% block extrahead %}
+
+<script type="text/javascript">
+    function openInSwan(){
+        if ( window.location !== window.parent.location ) { // Check if inside an iframe in jupyterlab
+            // If yes, send a message to the jupyterlab frontend extension 
+            // to download the notebook inside the same session
+            window.parent.postMessage('{{ config.gallery_url + page.meta.notebook_url | url }}','*');
+            // Skip redirecting the iframe page to start a new session inside the iframe
+            return false; 
+        } else {
+            // When not inside an iframe, continue redirecting to the href URL to start a new SWAN session
+            return true;
+        }
+    }
+</script>
+
 {{ super() }}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -32,7 +38,7 @@
             {{ page.meta.notebook_name }} 
             
             {% if page.meta.notebook_url %}
-            <a id="openInSWAN" onclick="openInSwan()" title="Open in SWAN" class="md-content__button md-icon">
+            <a href="{{ config.open_in_swan_url }}{{  config.gallery_url + page.meta.notebook_url | urlencode }}" id="openInSWAN" onclick="return openInSwan()" title="Open in SWAN" class="md-content__button md-icon">
                                         {% include ".icons/material/pencil.svg" %}
                             <span class="button__text">Open in SWAN</span>
                         </a>
