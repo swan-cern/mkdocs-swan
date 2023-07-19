@@ -1,4 +1,4 @@
-{% extends "full_width.html" %}
+{% extends "main.html" %}
 
 <!-- Add Jupyter basic javascript at the head of the file -->
 {% block extrahead %}
@@ -16,6 +16,23 @@
             return true;
         }
     }
+
+    // Add a fading event to the title + download bar 
+    // when scrolling to top
+    hidden = false;
+    window.addEventListener("scroll", (event) => {
+        hero = document.getElementsByClassName("md-hero__inner")[0];
+        var y = window.scrollY;
+        if (y >= 20) {
+            if (!hidden){
+                hidden = true;
+                hero.classList.add("hidden");
+            }
+        } else if (hidden) {
+            hidden = false;
+            hero.classList.remove("hidden");
+        }
+    });
 </script>
 
 {{ super() }}
