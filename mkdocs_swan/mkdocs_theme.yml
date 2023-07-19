@@ -4,6 +4,4 @@ logo: images/logo.png
 favicon: images/favicon.ico
 custom_dir: template
 language: en
-font:
-    text: 'Roboto'
-    code: 'Roboto Mono'
+font: false

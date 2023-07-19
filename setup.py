@@ -25,7 +25,7 @@ setup(
     ],
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['mkdocs-material==5.*'],
+    install_requires=['mkdocs-material==9.*'],
     entry_points={
         'mkdocs.themes': [
             'swan = mkdocs_swan',
