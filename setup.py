@@ -6,7 +6,7 @@ with open("README.md", encoding = "utf-8") as data:
 
 setup(
     name="mkdocs-swan",
-    version='0.3.0',
+    version='0.4.0',
     url='https://github.com/swan-cern/mkdocs-swan',
     license='BSD',
     description='SWAN theme for MkDocs',
