@@ -9,6 +9,9 @@ jobs:
   build-publish:
     name: Build and publish Python distributions to PyPI
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # To push to PyPI
+      contents: write  # To create a release
     steps:
     - uses: actions/checkout@master
 
@@ -21,10 +24,8 @@ jobs:
     - name: Build wheel
       run: python3 setup.py sdist bdist_wheel
 
-    - name: Publish distribution to PyPI
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        password: ${{ secrets.pypi_token }}
+    - name: Publish distribution to PyPI 🚀
+      uses: pypa/gh-action-pypi-publish@release/v1
     
     - name: Create Release
       id: create_release
