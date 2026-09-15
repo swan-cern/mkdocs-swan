@@ -3,6 +3,12 @@
     --md-accent-fg-color: #0053A1;
 }
 
+/* make accent color lighter in dark mode */
+[data-md-color-scheme="slate"] {
+    --md-accent-fg-color: #5AA9FF;
+    --md-typeset-a-color: #5AA9FF;
+}
+
 .md-header--shadow {
     box-shadow: none;
 }
@@ -41,7 +47,7 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    border: 1px solid #FAFAFA;
+    border: 1px solid var(--md-default-fg-color--lightest);
 }
 
 .md-header__button.md-logo img,
@@ -53,7 +59,7 @@
 
 @media only screen and (max-width: 76.1875em) {
     html .md-nav--primary .md-nav__title[for=__drawer] {
-        background-color: #03263C;
+        background-color: var(--md-primary-fg-color);
     }
     .md-nav__source {
         display: none;
@@ -61,7 +67,7 @@
 }
 
 .md-nav__title {
-    color: #777777;
+    color: var(--md-default-fg-color--light);
 }
 
 .md-typeset a,
@@ -77,7 +83,7 @@
 }
 
 .headerlink {
-    color: #777777 !important;
+    color: var(--md-default-fg-color--light) !important;
 }
 
 .headerlink:hover {
@@ -96,10 +102,10 @@
 }
 
 .md-footer-meta.md-typeset {
-    background-color: #FAFAFA;
-    border-top: solid 1px #DADADA;
+    background-color: var(--md-code-bg-color);
+    border-top: solid 1px var(--md-default-fg-color--lightest);
     font-size: 13px;
-    color: #777777;
+    color: var(--md-default-fg-color--light);
 }
 
 .md-footer-meta.md-typeset img {
@@ -112,6 +118,11 @@
     display: inline-block;
     width: 25%;
     text-align: right;
+}
+
+/* CERN logo is dark grey on transparent so invert in dark mode. */
+[data-md-color-scheme="slate"] .md-footer-meta.md-typeset .logo img {
+    filter: invert(1);
 }
 
 .md-footer-meta.md-typeset .text {
@@ -161,7 +172,7 @@ html .md-footer-meta.md-typeset a:visited {
 }
 
 span.md-footer__direction {
-    color: #777777;
+    color: var(--md-default-fg-color--light);
 }
 
 @media only screen and (min-width: 76.1875em) {
