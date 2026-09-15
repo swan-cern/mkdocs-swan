@@ -1,0 +1,38 @@
+[project]
+name = "mkdocs-swan"
+dynamic = ["version"]
+description = "SWAN theme for MkDocs"
+readme = "README.md"
+license = "AGPL-3.0"
+authors = [{ name = "SWAN Admins" }]
+keywords = ["MkDocs", "SWAN", "CERN"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Text Processing :: Markup :: HTML",
+]
+requires-python = ">=3.12"
+dependencies = ["mkdocs-material==9.*"]
+
+[project.urls]
+Homepage = "https://github.com/swan-cern/mkdocs-swan"
+GitHub = "https://github.com/swan-cern/mkdocs-swan"
+
+[project.entry-points."mkdocs.themes"]
+swan = "mkdocs_swan"
+
+[build-system]
+requires = ["hatchling==1.32.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch]
+version = { path = "mkdocs_swan/_version.py" }
+
+[tool.hatch.build]
+packages = ["mkdocs_swan"]
