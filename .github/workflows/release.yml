@@ -4,31 +4,79 @@ on:
   workflow_dispatch:
     inputs:
       bump:
-        description: "Release bump: major, minor or patch"
+        description: "Version bump: major, minor or patch"
         required: true
-        default: "patch"
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {} # Deny all permissions by default at workflow level
 
 jobs:
-  bump-version:
+  release:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    permissions:
+      id-token: write # Required for authentication with PyPI using OIDC
+      contents: write # Required to push commits and tags
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v2
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v10.1.0
         with:
-          python-version: '3.x'
-      - uses: BSFishy/pip-action@v1
-        with:
-          packages: |
-            bump2version
-      - name: Bump and tag
+          python-version: 3.14
+          enable-cache: false
+
+      - name: Bump version
+        id: version
+        env:
+          BUMP: ${{ inputs.bump }}
         run: |
-          git config --local user.email "swan-admins@cern.ch"
-          git config --local user.name "swan-admins[bot]"
-          bump2version ${{ github.event.inputs.bump }}
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.WORKFLOW_ACCESS_TOKEN }}
-          tags: true
+          # Run bump2version
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          uvx bump2version ${BUMP}
+
+          # Get the new tag
+          TAG=$(git describe --tags --exact-match)
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Generate release notes
+        run: |
+          # Get the previous tag for this extension
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || true)
+          # If there is a previous tag, get commits since that tag, otherwise get all commits
+          [ -n "$PREV_TAG" ] && RANGE="$PREV_TAG..HEAD" || RANGE="HEAD"
+          # Format commit messages as a markdown list for the release body
+          git log "$RANGE" --pretty=format:"- %B" > /tmp/release_body.md
+
+      - name: Push version bump commit and tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push origin master --tags --atomic
+
+      - name: Build wheel 📦
+        run: uv build
+
+      - name: Publish to PyPI 🚀
+        uses: pypa/gh-action-pypi-publish@v1.14.2
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "${TAG}" \
+            --title "Release ${TAG}" \
+            --notes-file /tmp/release_body.md
