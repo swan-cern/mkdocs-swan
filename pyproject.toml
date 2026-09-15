@@ -17,7 +17,7 @@ classifiers = [
     "Topic :: Software Development :: Documentation",
     "Topic :: Text Processing :: Markup :: HTML",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 dependencies = ["mkdocs-material==9.*"]
 
 [project.urls]
@@ -28,7 +28,7 @@ GitHub = "https://github.com/swan-cern/mkdocs-swan"
 swan = "mkdocs_swan"
 
 [build-system]
-requires = ["hatchling==1.27.0"]
+requires = ["hatchling==1.32.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch]
