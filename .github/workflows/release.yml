@@ -21,6 +21,7 @@ permissions: {} # Deny all permissions by default at workflow level
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: publish
     if: github.ref == 'refs/heads/master'
     permissions:
       id-token: write # Required for authentication with PyPI using OIDC
@@ -61,9 +62,10 @@ jobs:
 
       - name: Push version bump commit and tag
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW_ACCESS_TOKEN: ${{ secrets.WORKFLOW_ACCESS_TOKEN }}
         run: |
-          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          # Bypass branch protection rules by using the workflow access token
+          git remote set-url origin "https://x-access-token:${WORKFLOW_ACCESS_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push origin master --tags --atomic
 
       - name: Build wheel 📦
