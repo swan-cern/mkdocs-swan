@@ -286,6 +286,7 @@ span.md-footer__direction {
 }
 
 img.open_in_swan {
+    display: inline-block;
     margin: 0;
 }
 
